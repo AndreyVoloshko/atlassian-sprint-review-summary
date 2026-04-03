@@ -40,8 +40,9 @@ def test_config_sections_rendered():
 
 def test_formatting_rules_rendered():
     prompt = build_prompt({"x": 1})
-    assert "markdown" in prompt.lower()
-    assert "800 words" in prompt
+    assert "json" in prompt.lower()
+    assert "450 words" in prompt
+    assert "business_value_score" in prompt
 
 
 def test_config_loads_successfully():

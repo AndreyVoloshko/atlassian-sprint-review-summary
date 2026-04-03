@@ -51,7 +51,7 @@ Documentation is split by concern; there is intentionally no long project tree s
 - **Per-request overrides** — Temperature, max tokens, top-p, model ID, and prompt all overridable per request
 - **Multiple auth modes** — API key, Forge JWT, both, or none
 - **Atlassian-ready** — Works with Forge remotes and Connect backends out of the box
-- **Strict JSON output** — The generated summary follows a sectioned JSON shape with 2-3 concise conclusion bullets per section
+- **Strict JSON output** — The generated summary follows a sectioned JSON shape with 2-3 concise conclusion bullets per section, each with a `business_value_score` from `-100` to `100`
 
 ## Model Options
 

@@ -40,9 +40,10 @@ prompt:
     tone: professional, concise, executive, data-driven
     rules:
       - Return valid JSON only. No Markdown, no HTML, no code fences.
-      - Use this exact top-level shape: {"sections":[{"section":"<title>","bullets":["..."]}]}
-      - For each section, "bullets" must contain 2-3 strings.
-      - Each bullet string must be 1-2 sentences.
+      - Use this exact top-level shape: {"sections":[{"section":"<title>","bullets":[{"statement":"...","business_value_score":0}]}]}
+      - For each section, "bullets" must contain 2-3 objects.
+      - Each bullet object must include "statement" and "business_value_score".
+      - "business_value_score" must be an integer from -100 to 100.
 ```
 
 ### Fields
@@ -55,6 +56,17 @@ prompt:
 | `model.*` | Default model parameters (overridable by env vars and per-request params). |
 | `auth.*` | Default auth mode and Forge app id. |
 | `api.*` | Default allowed origins and log level. |
+
+### Business Value Scoring
+
+Each bullet now includes:
+- `statement`: 1-2 sentence conclusion.
+- `business_value_score`: integer from `-100` to `100` that indicates business impact.
+
+Interpretation:
+- `-100` to `-1`: negative impact
+- `0`: neutral impact
+- `1` to `100`: positive impact
 
 ## Customization Examples
 

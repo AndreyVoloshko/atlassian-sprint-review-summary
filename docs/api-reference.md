@@ -97,7 +97,7 @@ Depends on the `AuthMode` deployment parameter:
 
 ```json
 {
-  "summary": "{\"sections\":[{\"section\":\"Sprint Overview\",\"bullets\":[\"The sprint goal was largely achieved, with delivery focused on the authentication flow.\",\"Execution remained stable without material scope disruption.\"]}]}",
+  "summary": "{\"sections\":[{\"section\":\"Sprint Overview\",\"bullets\":[{\"statement\":\"The sprint goal was largely achieved, with delivery focused on the authentication flow.\",\"business_value_score\":72},{\"statement\":\"Execution remained stable without material scope disruption.\",\"business_value_score\":45}]}]}",
   "model": "eu.amazon.nova-micro-v1:0",
   "prompt_length": 1842
 }
@@ -105,9 +105,32 @@ Depends on the `AuthMode` deployment parameter:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `summary` | string | LLM output as a JSON string following configured section/bullet rules. |
+| `summary` | string | LLM output as a JSON string with sections and 2-3 bullet objects per section. |
 | `model` | string | Model ID that generated the response. |
 | `prompt_length` | int | Character length of the assembled prompt. |
+
+`summary` JSON shape:
+
+```json
+{
+  "sections": [
+    {
+      "section": "Sprint Overview",
+      "bullets": [
+        {
+          "statement": "Conclusion sentence(s).",
+          "business_value_score": 40
+        }
+      ]
+    }
+  ]
+}
+```
+
+`business_value_score` range:
+- `-100` = strongly negative business impact
+- `0` = neutral impact
+- `100` = strongly positive business impact
 
 ### Error Responses
 
