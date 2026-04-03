@@ -1,0 +1,41 @@
+# SAM build artifacts
+.aws-sam/
+packaged.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.pem
+package-lock.json
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/

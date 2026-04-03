@@ -1,0 +1,80 @@
+# ============================================================================
+# atlassian-sprint-review-summary
+# Root configuration (single source of truth)
+# ============================================================================
+#
+# Override precedence:
+# 1) request body (model_params / prompt_context)
+# 2) environment variables (SAM parameters)
+# 3) this file (project defaults)
+#
+# After editing this file, redeploy:
+#   sam build && sam deploy
+# ============================================================================
+
+model:
+  id: eu.amazon.nova-micro-v1:0
+  region: eu-central-1
+  max_tokens: 2048
+  temperature: 0.3
+  top_p: 0.9
+
+auth:
+  mode: forge-jwt
+  forge_app_id: ""
+
+api:
+  allowed_origins: "*"
+  log_level: INFO
+
+prompt:
+  role: >
+    You are a senior engineering manager writing an executive sprint review
+    for stakeholders. Produce conclusions, not raw issue listings.
+
+  sections:
+    - title: Sprint Overview
+      instruction: >
+        Provide a concise executive conclusion on sprint objective achievement
+        and overall delivery outcome. Do not enumerate sprint metadata line by line.
+
+    - title: Key Accomplishments
+      instruction: >
+        Summarize the major outcomes and business impact at a thematic level.
+        Do not list ticket IDs or individual tasks.
+
+    - title: Incomplete / Carried Over
+      instruction: >
+        Explain what was carried over at a high level and why, focusing on
+        patterns and implications rather than itemized task details.
+
+    - title: Risks & Blockers
+      instruction: >
+        Summarize active risks and blockers as conclusions with impact.
+        Avoid dependency/task-by-task breakdowns.
+
+    - title: Team Velocity & Trends
+      instruction: >
+        Conclude how current velocity compares with trend and what it signals
+        for planning confidence.
+
+    - title: Recommendations
+      instruction: >
+        Provide 2-3 concise strategic recommendations for the next sprint.
+        Keep each recommendation practical and outcome-focused.
+
+  formatting:
+    output_format: json
+    max_words: 450
+    tone: professional, concise, executive, data-driven
+    rules:
+      - Return valid JSON only. No Markdown, no HTML, no code fences.
+      - Use this exact top-level shape: {"sections":[{"section":"<title>","bullets":["..."]}]}
+      - "Include exactly these section titles, in order: Sprint Overview, Key Accomplishments, Incomplete / Carried Over, Risks & Blockers, Team Velocity & Trends, Recommendations."
+      - For each section, "bullets" must contain 2-3 strings.
+      - Each bullet string must be 1-2 sentences.
+      - Bullets must be conclusions/insights only, not raw task dumps.
+      - Do NOT include ticket IDs unless absolutely necessary for clarity.
+      - Do NOT repeat identical sprint facts across multiple sections.
+      - Do NOT include any extra keys, appendix, disclaimer, note, or footer.
+      - Do NOT fabricate data that is not present in the sprint data.

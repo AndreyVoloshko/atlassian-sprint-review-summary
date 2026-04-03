@@ -1,0 +1,36 @@
+version = 0.1
+
+[default.build.parameters]
+use_container = true
+
+[default.deploy.parameters]
+stack_name = "atlassian-sprint-review-summary"
+resolve_s3 = true
+s3_prefix = "atlassian-sprint-review-summary"
+region = "eu-central-1"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+parameter_overrides = "StageName=\"prod\" BedrockModelId=\"eu.amazon.nova-micro-v1:0\" BedrockRegion=\"eu-central-1\" LogLevel=\"INFO\" AllowedOrigins=\"*\" ForgeAppId=\"ari:cloud:ecosystem::app/YOUR_FORGE_APP_ID\" AuthMode=\"forge-jwt\""
+
+[dev.deploy.parameters]
+stack_name = "atlassian-sprint-review-summary-dev"
+resolve_s3 = true
+s3_prefix = "atlassian-sprint-review-summary-dev"
+region = "eu-central-1"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = false
+parameter_overrides = "StageName=\"dev\" AuthMode=\"none\" LogLevel=\"DEBUG\""
+
+[prod.deploy.parameters]
+stack_name = "atlassian-sprint-review-summary"
+resolve_s3 = true
+s3_prefix = "atlassian-sprint-review-summary"
+region = "eu-central-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "StageName=\"prod\" BedrockModelId=\"eu.amazon.nova-micro-v1:0\" BedrockRegion=\"eu-central-1\" LogLevel=\"INFO\" AllowedOrigins=\"*\" ForgeAppId=\"ari:cloud:ecosystem::app/YOUR_FORGE_APP_ID\" AuthMode=\"forge-jwt\""
+image_repositories = []
+
+[prod.global.parameters]
+region = "eu-central-1"

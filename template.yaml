@@ -1,0 +1,179 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  atlassian-sprint-review-summary — AI-driven sprint review summaries
+  via Amazon Bedrock, built for Atlassian Jira integration.
+
+# ---------------------------------------------------------------------------
+# Globals
+# ---------------------------------------------------------------------------
+
+Globals:
+  Function:
+    Timeout: 90
+    MemorySize: 256
+    Runtime: python3.12
+    Architectures:
+      - arm64
+
+# ---------------------------------------------------------------------------
+# Parameters
+# ---------------------------------------------------------------------------
+
+Parameters:
+  StageName:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, staging, prod]
+    Description: API Gateway deployment stage.
+
+  BedrockModelId:
+    Type: String
+    Default: eu.amazon.nova-micro-v1:0
+    Description: >
+      Bedrock model or inference profile ID.
+      For eu-central-1 use inference profiles such as:
+      eu.amazon.nova-micro-v1:0 (default), eu.amazon.nova-lite-v1:0.
+
+  BedrockRegion:
+    Type: String
+    Default: eu-central-1
+    Description: AWS region where the Bedrock model is available.
+
+  LogLevel:
+    Type: String
+    Default: INFO
+    AllowedValues: [DEBUG, INFO, WARNING, ERROR]
+    Description: Lambda log level.
+
+  AllowedOrigins:
+    Type: String
+    Default: "*"
+    Description: >
+      CORS allowed origins (comma-separated).
+      Restrict to your Atlassian app domain in production.
+
+  ForgeAppId:
+    Type: String
+    Default: ""
+    Description: >
+      Atlassian Forge app ID for JWT audience validation.
+      Leave empty to skip audience check.
+
+  AuthMode:
+    Type: String
+    Default: api-key
+    AllowedValues: [api-key, forge-jwt, both, none]
+    Description: >
+      api-key  — API Gateway managed key (default).
+      forge-jwt — Atlassian Forge JWT validation.
+      both     — Require API key + Forge JWT.
+      none     — No auth (development only).
+
+# ---------------------------------------------------------------------------
+# Conditions
+# ---------------------------------------------------------------------------
+
+Conditions:
+  UseApiKey: !Or
+    - !Equals [!Ref AuthMode, "api-key"]
+    - !Equals [!Ref AuthMode, "both"]
+
+# ---------------------------------------------------------------------------
+# Resources
+# ---------------------------------------------------------------------------
+
+Resources:
+  SprintSummaryApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: atlassian-sprint-review-summary
+      StageName: !Ref StageName
+      Description: AI-driven sprint review summary API for Atlassian Jira.
+      Auth:
+        ApiKeyRequired: false
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: atlassian-sprint-review-summary usage plan
+          Quota:
+            Limit: 1000
+            Period: MONTH
+          Throttle:
+            BurstLimit: 10
+            RateLimit: 5
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Api-Key,Authorization,X-Forge-OAuth-System'"
+        AllowOrigin: !Sub "'${AllowedOrigins}'"
+        MaxAge: "'600'"
+
+  SummarizeFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      FunctionName: atlassian-sprint-review-summary
+      Description: Generates AI-driven sprint review summaries via Amazon Bedrock.
+      CodeUri: .
+      Handler: main.lambda_handler
+      Environment:
+        Variables:
+          BEDROCK_MODEL_ID: !Ref BedrockModelId
+          BEDROCK_REGION: !Ref BedrockRegion
+          LOG_LEVEL: !Ref LogLevel
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+          FORGE_APP_ID: !Ref ForgeAppId
+          AUTH_MODE: !Ref AuthMode
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource:
+                # Inference profiles can route to foundation models across regions.
+                - !Sub "arn:aws:bedrock:*::foundation-model/*"
+                - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/*"
+      Events:
+        Summarize:
+          Type: Api
+          Properties:
+            Path: /summarize
+            Method: post
+            RestApiId: !Ref SprintSummaryApi
+            Auth:
+              ApiKeyRequired: !If [UseApiKey, true, false]
+        Health:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
+            RestApiId: !Ref SprintSummaryApi
+
+  SummarizeFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${SummarizeFunction}"
+      RetentionInDays: 14
+
+# ---------------------------------------------------------------------------
+# Outputs
+# ---------------------------------------------------------------------------
+
+Outputs:
+  ApiEndpoint:
+    Description: POST endpoint for generating sprint summaries.
+    Value: !Sub "https://${SprintSummaryApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/summarize"
+
+  HealthEndpoint:
+    Description: Health check endpoint (no auth required).
+    Value: !Sub "https://${SprintSummaryApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/health"
+
+  ApiId:
+    Description: API Gateway ID — use to look up your API key in the console.
+    Value: !Ref SprintSummaryApi
+
+  FunctionArn:
+    Description: Lambda function ARN.
+    Value: !GetAtt SummarizeFunction.Arn

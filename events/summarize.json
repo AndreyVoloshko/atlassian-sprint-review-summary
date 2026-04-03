@@ -1,0 +1,8 @@
+{
+  "httpMethod": "POST",
+  "path": "/summarize",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"sprint_data\":{\"sprint\":{\"name\":\"Sprint 24\",\"goal\":\"Complete user authentication flow and dashboard redesign\",\"startDate\":\"2026-03-16\",\"endDate\":\"2026-03-27\",\"state\":\"closed\"},\"metrics\":{\"totalIssues\":18,\"completedIssues\":14,\"incompleteIssues\":4,\"totalStoryPoints\":42,\"completedStoryPoints\":34},\"completedIssues\":[{\"key\":\"AUTH-101\",\"summary\":\"Implement OAuth2 login flow\",\"type\":\"Story\",\"storyPoints\":8,\"assignee\":\"Alice\"},{\"key\":\"AUTH-102\",\"summary\":\"Add password reset functionality\",\"type\":\"Story\",\"storyPoints\":5,\"assignee\":\"Bob\"},{\"key\":\"DASH-201\",\"summary\":\"Redesign main dashboard layout\",\"type\":\"Story\",\"storyPoints\":8,\"assignee\":\"Carol\"},{\"key\":\"DASH-202\",\"summary\":\"Add widget drag-and-drop\",\"type\":\"Story\",\"storyPoints\":5,\"assignee\":\"Dave\"},{\"key\":\"BUG-301\",\"summary\":\"Fix session timeout on mobile\",\"type\":\"Bug\",\"storyPoints\":3,\"assignee\":\"Alice\"}],\"incompleteIssues\":[{\"key\":\"AUTH-103\",\"summary\":\"MFA setup wizard\",\"type\":\"Story\",\"storyPoints\":5,\"assignee\":\"Bob\",\"reason\":\"Blocked by third-party API\"},{\"key\":\"DASH-203\",\"summary\":\"Dashboard export to PDF\",\"type\":\"Story\",\"storyPoints\":3,\"assignee\":\"Carol\",\"reason\":\"Deprioritized mid-sprint\"}]},\"prompt_context\":{\"additional_instructions\":\"Keep it under 5 bullet points per section.\"},\"model_params\":{\"max_tokens\":1024,\"temperature\":0.2}}"
+}
