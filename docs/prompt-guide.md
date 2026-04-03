@@ -2,6 +2,13 @@
 
 The prompt is the core of this project. It lives in root `config.yaml` so you can customize behavior without changing Python code.
 
+```mermaid
+flowchart TD
+  A[Request prompt_context.template] -->|highest| P[Effective Prompt]
+  B[Request prompt_context.additional_instructions] -->|middle| P
+  C[config.yaml prompt defaults] -->|base| P
+```
+
 ## File Location
 
 ```

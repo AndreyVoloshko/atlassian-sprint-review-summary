@@ -2,6 +2,13 @@
 
 Thanks for contributing to `atlassian-sprint-review-summary`.
 
+```mermaid
+flowchart LR
+  Dev[Contributor] --> Setup[poetry install]
+  Setup --> Checks[format lint test sam validate]
+  Checks --> PR[Open Pull Request]
+```
+
 ## Development Setup
 
 ```bash

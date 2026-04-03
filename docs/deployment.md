@@ -1,5 +1,13 @@
 # Deployment Guide
 
+```mermaid
+flowchart TD
+  A[Configure AWS credentials] --> B[Enable Bedrock model access]
+  B --> C[sam build]
+  C --> D[sam deploy --guided]
+  D --> E[Test health and summarize endpoints]
+```
+
 ## Prerequisites
 
 | Tool | Version | Install |

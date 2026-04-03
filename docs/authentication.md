@@ -2,6 +2,15 @@
 
 The API supports four authentication modes, configured via the `AuthMode` SAM parameter at deploy time.
 
+```mermaid
+flowchart LR
+  Req[Incoming request] --> Mode{AuthMode}
+  Mode -->|api-key| Key[API Gateway validates x-api-key]
+  Mode -->|forge-jwt| Jwt[Lambda validates FIT JWT]
+  Mode -->|both| Both[Gateway key + Lambda JWT validation]
+  Mode -->|none| Open[No authentication checks]
+```
+
 ## Modes
 
 | Mode | Header Required | Use Case |

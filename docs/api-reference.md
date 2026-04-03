@@ -2,6 +2,20 @@
 
 Base URL: `https://<API_ID>.execute-api.eu-central-1.amazonaws.com/<stage>`
 
+```mermaid
+sequenceDiagram
+  participant Client
+  participant API as API Gateway
+  participant Fn as Lambda
+  participant BR as Bedrock
+  Client->>API: POST /summarize + auth headers
+  API->>Fn: Invoke event
+  Fn->>BR: Converse API request
+  BR-->>Fn: Summary text
+  Fn-->>API: 200 JSON payload
+  API-->>Client: Response
+```
+
 ## `POST /summarize`
 
 Generate an AI-driven sprint review summary.

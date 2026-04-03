@@ -2,6 +2,17 @@
 
 This guide covers how to connect the Sprint Review Summary API to an Atlassian Jira app.
 
+```mermaid
+flowchart LR
+  Jira[Jira sprint data] --> Forge[Forge Resolver or Connect backend]
+  Forge --> API[API Gateway /summarize]
+  API --> Lambda[Summary Lambda]
+  Lambda --> Bedrock[Amazon Bedrock]
+  Bedrock --> Lambda
+  Lambda --> Forge
+  Forge --> UI[Sprint Review UI]
+```
+
 ## Option A: Forge App with Remote Backend (Recommended)
 
 Best for Marketplace apps and production use. Forge handles auth tokens automatically.

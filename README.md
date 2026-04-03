@@ -2,12 +2,12 @@
 
 Serverless API that generates **AI-driven sprint review summaries** using Amazon Bedrock. Built for Atlassian Jira integration.
 
-```
-Jira App ──► API Gateway ──► Lambda ──► Amazon Bedrock
-               (REST)       (Python)     (Nova Micro)
-                 │
-            API Key or
-           Forge JWT auth
+```mermaid
+flowchart LR
+  Jira[Jira App] --> Api[API Gateway REST]
+  Api --> Lambda[Lambda Python]
+  Lambda --> Bedrock[Amazon Bedrock Nova]
+  Auth[(API Key or Forge JWT)] --> Api
 ```
 
 ## Quick Start
