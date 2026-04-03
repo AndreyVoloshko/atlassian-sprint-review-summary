@@ -131,6 +131,7 @@ Depends on the `AuthMode` deployment parameter:
 - `-100` = strongly negative business impact
 - `0` = neutral impact
 - `100` = strongly positive business impact
+- Any integer between `-100` and `100` is valid and should be used as a graded scale (for example: `-70`, `-25`, `30`, `65`).
 
 ### Error Responses
 

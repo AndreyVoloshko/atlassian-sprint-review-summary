@@ -74,7 +74,9 @@ prompt:
       - For each section, "bullets" must contain 2-3 objects.
       - "Each bullet object must include exactly two keys: \"statement\" and \"business_value_score\"."
       - "\"statement\" must be 1-2 sentences and contain conclusions/insights only, not raw task dumps."
-      - "\"business_value_score\" must be an integer from -100 to 100 where negative means business downside, positive means business upside, and 0 means neutral impact."
+      - "\"business_value_score\" must be an integer on a full scale from -100 to 100 (not limited to -100, 0, or 100)."
+      - "Use graded values to reflect magnitude, e.g. -85, -40, -10, 0, 15, 55, 90."
+      - "Interpretation: negative = business downside, positive = business upside, 0 = neutral impact."
       - Do NOT include ticket IDs unless absolutely necessary for clarity.
       - Do NOT repeat identical sprint facts across multiple sections.
       - Do NOT include any extra keys, appendix, disclaimer, note, or footer.

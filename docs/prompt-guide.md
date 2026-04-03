@@ -61,12 +61,16 @@ prompt:
 
 Each bullet now includes:
 - `statement`: 1-2 sentence conclusion.
-- `business_value_score`: integer from `-100` to `100` that indicates business impact.
+- `business_value_score`: integer from `-100` to `100` on a full graded scale that indicates business impact.
 
 Interpretation:
 - `-100` to `-1`: negative impact
 - `0`: neutral impact
 - `1` to `100`: positive impact
+
+Important:
+- The score is **not** limited to `-100`, `0`, or `100`.
+- Use intermediate values to represent magnitude (for example: `-75`, `-20`, `10`, `45`, `88`).
 
 ## Customization Examples
 
