@@ -1,0 +1,22 @@
+---
+description: Use Mermaid for all visual documentation and explanations
+alwaysApply: true
+---
+
+# Mermaid For Visuals
+
+- Use Mermaid for every visual artifact (flows, sequences, architecture, state, timeline, dependency, and process diagrams).
+- Prefer Mermaid code blocks in Markdown docs and AI responses instead of image-based diagrams.
+- Keep diagrams concise, readable, and directly tied to current implementation details.
+- When a visual is requested, provide Mermaid first; use plain text only when user explicitly asks for no diagrams.
+
+## Example
+
+```mermaid
+flowchart LR
+  Jira[Jira Sprint Data] --> API[API Gateway]
+  API --> Lambda[Lambda Summarize Function]
+  Lambda --> Bedrock[Amazon Bedrock]
+  Bedrock --> Lambda
+  Lambda --> API
+```

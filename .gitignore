@@ -20,7 +20,9 @@ env/
 # IDE
 .idea/
 .vscode/
-.cursor/
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 *.swp
 *.swo
 *~
